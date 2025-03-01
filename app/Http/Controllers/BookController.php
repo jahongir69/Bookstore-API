@@ -8,10 +8,19 @@ use App\Http\Resources\BookResource;
 
 class BookController extends Controller
 {
-    public function index()
+   
+    public function index(Request $request)
     {
-        $books = Book::with('author')->paginate(10);
+        $perPage = $request->get('per_page', 10); 
+        $books = Book::paginate($perPage); 
 
-        return BookResource::collection($books)->response()->getData(true);
+        return response()->json([
+            'data' => $books->items(), 
+            'total' => $books->total(), 
+            'per_page' => $books->perPage(), 
+            'current_page' => $books->currentPage(), 
+            'last_page' => $books->lastPage() 
+        ]);
     }
 }
+
