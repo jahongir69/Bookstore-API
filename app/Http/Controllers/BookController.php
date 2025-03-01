@@ -13,7 +13,21 @@ public function index(Request $request)
     $perPage = $request->get('per_page', 10);
     $books = Book::paginate($perPage);
 
-    return BookResource::collection($books);
+    return response()->json([
+        'data'  => BookResource::collection($books),
+        'meta'  => [
+            'current_page' => $books->currentPage(),
+            'last_page'    => $books->lastPage(),
+            'per_page'     => $books->perPage(),
+            'total'        => $books->total(),
+        ],
+        'links' => [
+            'first' => $books->url(1),
+            'last'  => $books->url($books->lastPage()),
+            'prev'  => $books->previousPageUrl(),
+            'next'  => $books->nextPageUrl(),
+        ]
+    ]);
 }
 
 }
