@@ -16,4 +16,4 @@ class BookResource extends JsonResource
             'author' => new AuthorResource($this->whenLoaded('author')),
         ];
     }
-}
+
